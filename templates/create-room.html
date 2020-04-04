@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+	{% for record in data %}
+		<div id="messages"><p>{{ record['sender'] }} : {{ record['text'] }}</p></div>
+	{% endfor %}
+	<div >
+		<form id="message_input_form" >
+			<label>Type Here:</label>
+			<input type="text" id="message_input" name="message"><br>
+			<button type="submit">Send</button>
+		</form>
+	</div>
+</body>
+
+
+</html>

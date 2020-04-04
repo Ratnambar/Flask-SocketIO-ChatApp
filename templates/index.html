@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+	<h3>Hi : {{ current_user.username }}</h3>
+	<div>
+		{% for room_name in room_name %}
+				<li><a href="/{{ room_name }}">{{ room_name }}</a></li>
+		{% endfor %}
+	</div>
+
+</body>
+
+
+</html>

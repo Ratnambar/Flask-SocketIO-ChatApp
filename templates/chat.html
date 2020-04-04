@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+<body>
+	<h3>Welcome : {{ current_user.username }}</h3>
+	<div id="container" style="border: 1px solid; ">
+		<a href="/logout">logout</a>
+		<div id="Room_Name" style="margin-left: 0px;margin-top: 50px;color: red;">
+			{% for room_name in room_name_list %}
+					<li style="color: red;"><a href="/{{ room_name }}">{{ room_name }}</a></li>
+			{% endfor %}
+		</div>
+			<div style="border: 1px solid blue; margin-left: 140px;margin-top: -123px;padding: 10px;">
+				{% for message in all_messages %}
+					<div id="messages" style="margin-left: 100px;margin-top: 0px;"><b>{{ message['sender'] }}</b> : {{ message['text'] }}:{{ message['send_at'] }}</div>
+				{% endfor %}
+		
+				<div >
+					<form id="message_input_form" >
+						<label>Type Here:</label>
+						<input type="text" id="message_input" name="message"><br>
+						<button type="submit">Send</button>
+					</form>
+				</div>
+			</div>
+	</div>
+</body>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	const socket = io.connect("http://127.0.0.1:5000");
+	socket.on('connect', function(){
+		
+
+				let sender_input = document.getElementById("sender_input");
+				let receiver_input = document.getElementById("receiver_input");
+				let message_input = document.getElementById("message_input");
+
+			document.getElementById("message_input_form").onsubmit = function(e){
+				e.preventDefault();
+				let message = message_input.value.trim();
+				if(message.length){
+					socket.emit('send_message',{
+						room_name : "{{ room_name }}",
+						sender : "{{ current_user.username }}",
+						message :  message 
+					});
+				}
+				message_input.value = '';
+			}
+
+	});
+
+
+			socket.on('receive_message',function(data){
+				const newNode = document.createElement('div');
+				newNode.innerHTML = `${data.sender}:&nbsp;&nbsp;${data.message}:&nbsp&nbsp${data.room_name}`;
+				document.getElementById("messages").appendChild(newNode);
+			});
+
+			
+			
+</script>
+</html>
