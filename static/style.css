@@ -1,20 +1,56 @@
+nav{
+	padding: 20px;
+}
+
 #message_input-div{
 	margin: 0 auto;
 }
-li a{
-	text-decoration: none;
+
+.navbar-brand{
+	color: white;
 }
 
+.logout{
+	color: red;
+	margin-left: 0px;
+	margin-top: 50px;
+	margin-right: 240px;
+	border-bottom: 1px solid red;
+	text-decoration: none;
+
+}
 #container{
-	border: 1px solid;
+	display: flex;
 	background-color: yellow;
+	width: 200px;
+	height: 200px;
+	/*padding:10%;*/
 }
 #messages{
 	margin-left: 100px;
+	margin-top: 0px;
+
 }
-#Room_Name{
-	margin-left: 10px;
+#Room-Name {
+	margin-left: 0px;
+	margin-top: 50px;
+	margin-right: 640px;
+	display: flex;
+	padding: 20px;
 }
-body{
-	background-color: green;
+#Room {
+	margin-left: 0px;
+	margin-top: 50px;
+	margin-right: 640px;
+	border-bottom: 1px solid red;
 }
+
+#page{
+	display: flex;
+}
+
+/*#Form{
+	margin-top: -100px;
+}*/
+
+

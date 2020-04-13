@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for,request,redirect,request
 from flask_socketio import SocketIO,leave_room
 from flask_login import login_user,LoginManager,login_required,logout_user,current_user
-from db import get_user,save_user,get_all_user,save_messages,get_messages,get_all_rooms,save_rooms
+from db import get_user,save_user,get_all_user,save_messages,get_messages,get_all_rooms
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime
 
@@ -65,15 +65,16 @@ def signup():
 @app.route('/<room_name>',methods=['GET','POST'])
 def handle_newUser_message(room_name):
 	l = []
+	r=room_name
+	# print(r)
 	if current_user.is_authenticated:
 		all_messages = get_messages(room_name)
 		rooms = get_all_rooms()
 		for room in rooms:
 			room_name = room['room_name']
 			l.append(room_name)
-		for message in all_messages:
-			print(message)
-		return render_template('chat.html',all_messages=all_messages,room_name=room_name,room_name_list=l)
+		# print(l)
+		return render_template('chat.html',all_messages=all_messages,r=r,room_name_list=l)
 	return redirect(url_for('home'))
 
 
@@ -94,6 +95,7 @@ def logout():
 @socketio.on('send_message')
 def handle_send_message(data):
 	save_messages(data['message'],data['sender'],data['room_name'],datetime.now())
+	# print(data['room_name'])
 	socketio.emit('receive_message',data=data);
 
 

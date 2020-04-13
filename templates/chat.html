@@ -2,31 +2,46 @@
 <html>
 <head>
 	<title></title>
-	<link rel="stylesheet" type="text/css" href="static/style.css">
+	<!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-	<h3>Welcome : {{ current_user.username }}</h3>
-	<div id="container" style="border: 1px solid; ">
-		<a href="/logout">logout</a>
-		<div id="Room_Name" style="margin-left: 0px;margin-top: 50px;color: red;">
-			{% for room_name in room_name_list %}
-					<li style="color: red;"><a href="/{{ room_name }}">{{ room_name }}</a></li>
-			{% endfor %}
-		</div>
-			<div style="border: 1px solid blue; margin-left: 140px;margin-top: -123px;padding: 10px;">
-				{% for message in all_messages %}
-					<div id="messages" style="margin-left: 100px;margin-top: 0px;"><b>{{ message['sender'] }}</b> : {{ message['text'] }}:{{ message['send_at'] }}</div>
+	<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+		<a class="navbar-brand" >Welcome : {{ current_user.username }}</a>
+		<div id="logout"><a class="logout" href="/logout">logout</a></div>
+	</nav>
+	<!-- <p>Welcome : {{ current_user.username }}</p> -->
+		<div id="container">
+			<!-- <div id="logout"><a class="logout" href="/logout">logout</a></div> -->
+			<div id="Room-List">
+				{% for room_name in room_name_list %}
+						<div id="Room"><a href="/{{ room_name }}">{{ room_name }}</a></div>
 				{% endfor %}
-		
-				<div >
+			</div>
+			<div id="records">
+				<div id="messages-list">
+				{% for message in all_messages %}
+					{% if current_user.username in message['sender'] %}
+						<div id="current_user_messages"><b>{{ message['sender'] }}</b> : {{message['text'] }}:{{ message['send_at'] }}</div>
+					{% else %}
+						<div id="other_users_messages"><b>{{ message['sender'] }}</b> : {{message['text'] }}:{{ message['send_at'] }}</div>
+					{% endif %}
+					
+				{% endfor %}
+				</div>
+				<div id="message-form" >
 					<form id="message_input_form" >
-						<label>Type Here:</label>
-						<input type="text" id="message_input" name="message"><br>
-						<button type="submit">Send</button>
+						<div class="input-group flex-nowrap">
+						    <div class="input-group-prepend">
+						        <span class="input-group-text" id="addon-wrapping">@</span>
+						    </div>
+						  	<input type="text" class="form-control" placeholder="Your Message Here" aria-label="Username" aria-describedby="addon-wrapping" id="message_input" name="message">
+						    <button type="submit">Send</button>
+					    </div>
 					</form>
 				</div>
 			</div>
-	</div>
+		</div>
 </body>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
@@ -44,7 +59,7 @@
 				let message = message_input.value.trim();
 				if(message.length){
 					socket.emit('send_message',{
-						room_name : "{{ room_name }}",
+						room_name : "{{ r }}",
 						sender : "{{ current_user.username }}",
 						message :  message 
 					});
@@ -58,10 +73,98 @@
 			socket.on('receive_message',function(data){
 				const newNode = document.createElement('div');
 				newNode.innerHTML = `${data.sender}:&nbsp;&nbsp;${data.message}:&nbsp&nbsp${data.room_name}`;
-				document.getElementById("messages").appendChild(newNode);
+				var k = document.getElementById("messages");
+				if(k!=null)
+				{
+					k.appendChild(newNode).style.color = 'blue';
+				}
+				
 			});
 
 			
 			
 </script>
+<style>
+body{
+		background-color: #B2BABB ;
+	}
+	#container{
+		display: flex;
+		width: 700px;
+		height: 400px;
+		margin: 0px auto;
+		background-color: #A569BD;
+	}
+	p{
+		border-bottom: 1px solid;
+		padding: 10px 0px 10px 0px;
+	}
+	#Room{
+		border-bottom: 1px solid;
+		padding: 10px 0px 10px 0px;
+		background-color: ;
+	}
+	#Room-List{
+		width: 200px;
+		height: 400px;
+		border: none;
+		text-align: center;
+		text-decoration: none;
+		background-color:#85C1E9 ;
+	}
+	#records {
+    width: 500px;
+    height: 367px;
+}
+	#current_user_messages{
+		width: 400px;
+		background-color: lightgreen;
+		/*text-align: right;*/
+		border: 1px solid;
+		border-radius: 20px;
+		margin-top: 20px;
+		margin-left: 100px;
+		padding: 10px;
+		display: flex;
+		margin-bottom: 20px;
+	}
+	#other_users_messages{
+		display: flex;
+		width: 400px;
+		background-color: pink;
+		border-radius: 20px;
+		border: 1px solid;
+		padding: 10px;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	#message-form {
+    display: flex;
+    margin: 4px 0px 0px 0px;
+    width: 500px;
+    background-color: ;
+}
+	.form-control{
+		border: 1px solid;
+		margin: 0px 100px 0px 0px;
+		width: 413px;
+	}
+		button{
+		margin: 0px 0px 0px -100px;
+		background-color: yellow;
+		color: green;
+		border: none;
+		padding: 6px;
+	}
+
+	#messages-list{
+		width: 500px;
+		height: 360px;
+	}
+
+	/*##messages p{
+		color: red;
+	}*/
+
+</style>
 </html>

@@ -25,9 +25,6 @@ def get_all_user():
 	all_user_data = collections.find()
 	return all_user_data
 
-def save_rooms(room_name):
-	room = room_collections.insert({'_id':room_name,'room_name':room_name,'sender':sender,'text':message,'created_at':datetime.now()})
-	return room
 
 def get_all_rooms():
 	room = room_collections.find({})
@@ -35,9 +32,10 @@ def get_all_rooms():
 	
 def save_messages(text,sender,room_name,send_at):
 	messages_collections.insert_one({'text':text,'sender':sender,'room_name':room_name,'send_at':datetime.now()})
+	# print(room_name)
 
 def get_messages(room_name):
 	all_messages = list(messages_collections.find({'room_name':room_name}))
 	for message in all_messages:
 		message['send_at'] = message['send_at'].strftime("%d %b, %H:%M")
-	return all_messages[::-1]
+	return all_messages
