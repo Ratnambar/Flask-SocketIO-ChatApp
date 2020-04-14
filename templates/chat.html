@@ -6,11 +6,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
+	<div id="main">
 	<nav class="navbar navbar-expand-lg navbar-light bg-dark">
 		<a class="navbar-brand" >Welcome : {{ current_user.username }}</a>
 		<div id="logout"><a class="logout" href="/logout">logout</a></div>
 	</nav>
 	<!-- <p>Welcome : {{ current_user.username }}</p> -->
+	
 		<div id="container">
 			<!-- <div id="logout"><a class="logout" href="/logout">logout</a></div> -->
 			<div id="Room-List">
@@ -22,9 +24,9 @@
 				<div id="messages-list">
 				{% for message in all_messages %}
 					{% if current_user.username in message['sender'] %}
-						<div id="current_user_messages"><b>{{ message['sender'] }}</b> : {{message['text'] }}:{{ message['send_at'] }}</div>
+						<div id="current_user_messages"><b>You</b> : {{message['text'] }}</div><p id="current-user-send-time">{{ message['send_at'] }}</p>
 					{% else %}
-						<div id="other_users_messages"><b>{{ message['sender'] }}</b> : {{message['text'] }}:{{ message['send_at'] }}</div>
+						<div id="other_users_messages"><b>{{ message['sender'] }}</b> : {{message['text'] }}</div><p id="other-user-send-time">{{ message['send_at'] }}</p>
 					{% endif %}
 					
 				{% endfor %}
@@ -42,6 +44,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
@@ -88,10 +91,27 @@
 body{
 		background-color: #B2BABB ;
 	}
+	#main{
+		/*display: flex;*/
+		margin: 0 auto;
+		margin-top: 150px;
+		margin-bottom: 150px;
+		width: 80%;
+	}
+	nav{
+		margin-top: -10px;
+		/*padding: 40px;*/
+	}
+	.navbar-brand{
+		padding: 20px;
+		color: white;
+	}
+	#logout{
+		margin-left: 600px;
+	}
 	#container{
 		display: flex;
-		width: 700px;
-		height: 400px;
+		width: 100%;
 		margin: 0px auto;
 		background-color: #A569BD;
 	}
@@ -105,49 +125,61 @@ body{
 		background-color: ;
 	}
 	#Room-List{
-		width: 200px;
-		height: 400px;
+		width: 40%;
 		border: none;
 		text-align: center;
 		text-decoration: none;
 		background-color:#85C1E9 ;
 	}
 	#records {
-    width: 500px;
-    height: 367px;
-}
+    width: 100%;
+	}
 	#current_user_messages{
-		width: 400px;
-		background-color: lightgreen;
-		/*text-align: right;*/
-		border: 1px solid;
+		width: 60%;
+		float: right;
+		background-color:#f1f1f1 ;
 		border-radius: 20px;
-		margin-top: 20px;
-		margin-left: 100px;
+		margin-top: 0px;                
+		/*text-align: right;*/
+		/*margin-left: 900px;*/
 		padding: 10px;
 		display: flex;
-		margin-bottom: 20px;
+	}
+
+	#current-user-send-time{
+		margin-top: -10px;
+		float: right;
+		margin-left: 380px;
+		color: blue;
+		/*padding: 10px 0px 10px 0px;*/
+   	    border-bottom: none;
 	}
 	#other_users_messages{
 		display: flex;
-		width: 400px;
-		background-color: pink;
+		width: 60%;
+		/*float: left;*/
+		background-color: #ddd;
 		border-radius: 20px;
-		border: 1px solid;
 		padding: 10px;
-		margin-top: 20px;
-		margin-bottom: 20px;
+		margin-top: 0px;
 	}
+	#other-user-send-time {
+    margin-top: -10px;
+    margin-left: 45%;
+    color: blue;
+    /*padding: 10px 0px 10px 0px;*/
+    border-bottom: none;
+	}
+	
 	#message-form {
-    display: flex;
-    margin: 4px 0px 0px 0px;
-    width: 500px;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
     background-color: ;
-}
+	}
 	.form-control{
 		border: 1px solid;
 		margin: 0px 100px 0px 0px;
-		width: 413px;
+		width: 100%;
 	}
 		button{
 		margin: 0px 0px 0px -100px;
@@ -156,15 +188,14 @@ body{
 		border: none;
 		padding: 6px;
 	}
-
-	#messages-list{
-		width: 500px;
-		height: 360px;
+	#message_input{
+		width: 100%;
 	}
 
-	/*##messages p{
-		color: red;
-	}*/
+	#messages-list{
+		width: 100%;
+	}
+
 
 </style>
 </html>
